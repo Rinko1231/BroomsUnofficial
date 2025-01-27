@@ -1,7 +1,6 @@
 {
-  "pack": {
-    "description": "broomsmod resources",
-    "pack_format": 9,
-    "_comment": ""
-  }
+    "pack": {
+        "description": "Resources for Cataclysm: Incinerator's Try Hard",
+        "pack_format": 6
+    }
 }
