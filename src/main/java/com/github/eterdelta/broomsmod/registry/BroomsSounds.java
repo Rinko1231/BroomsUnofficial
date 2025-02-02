@@ -1,33 +1,16 @@
 package com.github.eterdelta.broomsmod.registry;
 
 import com.github.eterdelta.broomsmod.BroomsMod;
-import net.minecraft.core.Holder;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.neoforged.neoforge.registries.DeferredRegister;
-
-import java.util.function.Supplier;
-
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 public class BroomsSounds {
 
-    public static final DeferredRegister<SoundEvent> SOUND_EVENTS = DeferredRegister.create(BuiltInRegistries.SOUND_EVENT, BroomsMod.MODID);
+    public static final DeferredRegister<SoundEvent> SOUND_EVENTS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, BroomsMod.MODID);
 
-    public static final Holder<SoundEvent> BROOM_DESTROY = createHolderEvent("entity.wooden_broom.destroy");
-    public static final Holder<SoundEvent> BROOM_FALL = createHolderEvent("entity.wooden_broom.fall");
-
-    private static Supplier<SoundEvent> createEvent(String sound) {
-        ResourceLocation name = ResourceLocation.fromNamespaceAndPath(BroomsMod.MODID, sound);
-        return SOUND_EVENTS.register(sound, () -> SoundEvent.createVariableRangeEvent(name));
-    }
-
-
-    private static Holder<SoundEvent> createHolderEvent(String sound) {
-        ResourceLocation name = ResourceLocation.fromNamespaceAndPath(BroomsMod.MODID, sound);
-        return SOUND_EVENTS.register(sound, () -> SoundEvent.createVariableRangeEvent(name));
-    }
-
-
-
+    public static final RegistryObject<SoundEvent> BROOM_DESTROY = SOUND_EVENTS.register("entity.wooden_broom.destroy", () -> new SoundEvent(new ResourceLocation(BroomsMod.MODID, "entity.wooden_broom.destroy")));
+    public static final RegistryObject<SoundEvent> BROOM_FALL = SOUND_EVENTS.register("entity.wooden_broom.fall", () -> new SoundEvent(new ResourceLocation(BroomsMod.MODID, "entity.wooden_broom.fall")));
 }
