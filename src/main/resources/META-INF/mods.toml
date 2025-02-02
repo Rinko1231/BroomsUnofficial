@@ -1,12 +1,26 @@
-modLoader="javafml"
-loaderVersion="[43,)"
-license="GPLv3"
-
+modLoader = "javafml"
+loaderVersion = "[41,)"
+license = "MIT"
 [[mods]]
-modId="incineratorstryhard"
-version="1.19.2-1.0.1"
-displayName="Cataclysm: Incinerator's Try Hard"
-authors="Rinko1231"
-description='''
-Custom the damage and charging time of the Incinerator!
+modId = "broomsmod"
+version = "1.20.1-1.1.2"
+displayName = "Brooms Unofficial"
+authors = "EterDelta, xbxbxb123, Rinko1231"
+description = '''
+Adds balanced enchantable brooms to Minecraft. Fly around the world!
+Ported to 1.20.1 by Rinko1231
 '''
+
+[[dependencies.broomsmod]]
+modId = "forge"
+mandatory = true
+versionRange = "[41,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.broomsmod]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.20,)"
+ordering = "NONE"
+side = "BOTH"
