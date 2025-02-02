@@ -8,6 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -26,9 +27,10 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Objects;
 
 public class WoodenBroomEntity extends Entity {
     private static final EntityDataAccessor<ItemStack> ITEM = SynchedEntityData.defineId(WoodenBroomEntity.class, EntityDataSerializers.ITEM_STACK);
@@ -66,13 +68,18 @@ public class WoodenBroomEntity extends Entity {
         this.zo = z;
     }
 
+
     @Override
-    protected void defineSynchedData() {
-        this.entityData.define(ITEM, ItemStack.EMPTY);
-        this.entityData.define(HURT_TIME, 0);
-        this.entityData.define(HURT_DIR, 1);
-        this.entityData.define(DAMAGE, 0.0F);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(ITEM, ItemStack.EMPTY);
+        builder.define(HURT_TIME, 0);
+        builder.define(HURT_DIR, 1);
+        builder.define(DAMAGE, 0.0F);
     }
+
+    private static final EntityDataAccessor<String> WOODEN_BROOM = SynchedEntityData.defineId(WoodenBroomEntity.class, EntityDataSerializers.STRING);
+
+
 
     @Override
     public boolean isPushable() {
@@ -85,10 +92,10 @@ public class WoodenBroomEntity extends Entity {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurt(@NotNull DamageSource source, float amount) {
         if (this.isInvulnerableTo(source)) {
             return false;
-        } else if (!this.level.isClientSide && !this.isRemoved()) {
+        } else if (!this.level().isClientSide && !this.isRemoved()) {
             this.setHurtDir(-this.getHurtDir());
             this.setHurtTime(10);
             this.setDamage(this.getDamage() + amount * 10.0F);
@@ -96,7 +103,7 @@ public class WoodenBroomEntity extends Entity {
             this.gameEvent(GameEvent.ENTITY_DAMAGE, source.getEntity());
             boolean flag = source.getEntity() instanceof Player && ((Player) source.getEntity()).getAbilities().instabuild;
             if (flag || this.getDamage() > 40.0F) {
-                if (!flag && this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+                if (!flag && this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
                     this.spawnBroomItem();
                 }
                 this.discard();
@@ -108,7 +115,7 @@ public class WoodenBroomEntity extends Entity {
     }
 
     @Override
-    public void push(Entity entity) {
+    public void push(@NotNull Entity entity) {
         if (entity instanceof WoodenBroomEntity) {
             if (entity.getBoundingBox().minY < this.getBoundingBox().maxY) {
                 super.push(entity);
@@ -119,7 +126,7 @@ public class WoodenBroomEntity extends Entity {
     }
 
     @Override
-    public void animateHurt() {
+    public void animateHurt(float p_265161_) {
         this.setHurtDir(-this.getHurtDir());
         this.setHurtTime(10);
         this.setDamage(this.getDamage() * 11.0F);
@@ -141,9 +148,11 @@ public class WoodenBroomEntity extends Entity {
     }
 
     @Override
-    public Direction getMotionDirection() {
+    public @NotNull Direction getMotionDirection() {
         return this.getDirection().getClockWise();
     }
+
+
 
     @Override
     public void tick() {
@@ -152,13 +161,13 @@ public class WoodenBroomEntity extends Entity {
 
         this.setDeltaMovement(this.getDeltaMovement().multiply(0.8D, 0.9D, 0.8D));
 
-        if (!this.isOnGround() && !this.seaBreezing) {
+        if (!this.onGround() && !this.seaBreezing) {
             if (this.hoverTime > 0) {
                 this.canHover = true;
                 this.hoverTime--;
 
                 if (this.hoverTime == 5) {
-                    this.playSound(BroomsSounds.BROOM_FALL.get(), 1.0F, 1.0F);
+                    this.playSound(BroomsSounds.BROOM_FALL.value(), 1.0F, 1.0F);
                 }
             } else {
                 this.canHover = false;
@@ -181,11 +190,11 @@ public class WoodenBroomEntity extends Entity {
         }
 
         if (this.isVehicle()) {
-            this.setYRot(this.getControllingPassenger().getYRot());
+            this.setYRot(Objects.requireNonNull(this.getControllingPassenger()).getYRot());
         }
 
         if (this.isControlledByLocalInstance()) {
-            if (this.level.isClientSide) {
+            if (this.level().isClientSide) {
                 this.handleInputs();
             }
             this.move(MoverType.SELF, this.getDeltaMovement());
@@ -193,7 +202,7 @@ public class WoodenBroomEntity extends Entity {
             this.setDeltaMovement(Vec3.ZERO);
         }
 
-        if (this.level.getBlockState(this.blockPosition().below()).is(Blocks.WATER) && EnchantmentHelper.getItemEnchantmentLevel(BroomsEnchantments.SEA_BREEZE.get(), this.getItem()) > 0) {
+        if (this.level().getBlockState(this.blockPosition().below()).is(Blocks.WATER) && EnchantmentHelper.getTagEnchantmentLevel(BroomsEnchantments.SEA_BREEZE, this.getItem()) > 0) {
             this.seaBreezing = true;
             if (this.getDeltaMovement().y() < 0) {
                 this.setDeltaMovement(this.getDeltaMovement().multiply(0.9D, 0.3D, 0.9D));
@@ -203,9 +212,9 @@ public class WoodenBroomEntity extends Entity {
         }
 
         this.checkInsideBlocks();
-        List<Entity> list = this.level.getEntities(this, this.getBoundingBox().inflate(0.2F, -0.01F, 0.2F), EntitySelector.pushableBy(this));
+        List<Entity> list = this.level().getEntities(this, this.getBoundingBox().inflate(0.2F, -0.01F, 0.2F), EntitySelector.pushableBy(this));
         if (!list.isEmpty()) {
-            boolean flag = !this.level.isClientSide && !(this.getControllingPassenger() instanceof Player);
+            boolean flag = !this.level().isClientSide && !(this.getControllingPassenger() instanceof Player);
 
             for (Entity entity : list) {
                 if (!entity.hasPassenger(this)) {
@@ -219,7 +228,7 @@ public class WoodenBroomEntity extends Entity {
         }
 
         if (this.isInWaterOrBubble()) {
-            this.playSound(BroomsSounds.BROOM_DESTROY.get(), 0.8F, 1.0F);
+            this.playSound(BroomsSounds.BROOM_DESTROY.value(), 0.8F, 1.0F);
             this.spawnBroomItem();
             this.discard();
         }
@@ -248,7 +257,7 @@ public class WoodenBroomEntity extends Entity {
 
     private void handleInputs() {
         if (this.isVehicle()) {
-            LivingEntity controller = (LivingEntity) this.getControllingPassenger();
+            LivingEntity controller = this.getControllingPassenger();
             Vec3 inputVector = this.getInputVector(new Vec3(controller.xxa * 0.8F, 0.0D, controller.zza), this.getSpeed(), this.getYRot());
 
             if (this.inputLeft || this.inputRight || this.inputUp || this.inputDown) {
@@ -260,10 +269,14 @@ public class WoodenBroomEntity extends Entity {
             }
         }
     }
+    
 
     @Override
-    public void positionRider(Entity rider) {
-        super.positionRider(rider);
+    public void positionRider(@NotNull Entity rider, @NotNull MoveFunction p_19958_) {
+        if (this.hasPassenger(rider)) {
+            double d0 = this.getY() + this.getPassengersRidingOffset() + rider.getMyRidingOffset();
+            p_19958_.accept(rider, this.getX(), d0, this.getZ());
+        }
         if (rider instanceof Player player) {
             player.setYBodyRot(player.getYHeadRot());
         }
@@ -281,11 +294,11 @@ public class WoodenBroomEntity extends Entity {
     }
 
     @Override
-    public InteractionResult interact(Player p_38330_, InteractionHand p_38331_) {
+    public @NotNull InteractionResult interact(Player p_38330_, @NotNull InteractionHand p_38331_) {
         if (p_38330_.isSecondaryUseActive()) {
             return InteractionResult.PASS;
         } else {
-            if (!this.level.isClientSide()) {
+            if (!this.level().isClientSide()) {
                 return p_38330_.startRiding(this) ? InteractionResult.CONSUME : InteractionResult.PASS;
             } else {
                 return InteractionResult.SUCCESS;
@@ -294,13 +307,13 @@ public class WoodenBroomEntity extends Entity {
     }
 
     @Override
-    protected void checkFallDamage(double p_19911_, boolean p_19912_, BlockState p_19913_, BlockPos p_19914_) {
+    protected void checkFallDamage(double p_19911_, boolean p_19912_, @NotNull BlockState p_19913_, @NotNull BlockPos p_19914_) {
         this.fallDistance = 0.0F;
     }
 
     @Override
-    public Entity getControllingPassenger() {
-        return this.getFirstPassenger();
+    public LivingEntity getControllingPassenger() {
+        return (LivingEntity) this.getFirstPassenger();
     }
 
     public void setInputs(boolean left, boolean right, boolean up, boolean down, boolean jumping) {
@@ -312,12 +325,12 @@ public class WoodenBroomEntity extends Entity {
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
+    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override
-    protected void addPassenger(Entity passenger) {
+    protected void addPassenger(@NotNull Entity passenger) {
         super.addPassenger(passenger);
         if (this.isControlledByLocalInstance() && this.lerpSteps > 0) {
             this.lerpSteps = 0;
@@ -387,14 +400,14 @@ public class WoodenBroomEntity extends Entity {
     }
 
     public float getSpeed() {
-        if (this.isOnGround()) {
-            return 0.08F + (0.08F * (this.getItem().getEnchantmentLevel(BroomsEnchantments.LAND_SKILLS.get())) * 20 / 100.0F);
+        if (this.onGround()) {
+            return 0.08F + (0.08F * (this.getItem().getEnchantmentLevel(BroomsEnchantments.LAND_SKILLS)) * 20 / 100.0F);
         } else {
-            return 0.08F + (0.08F * (this.getItem().getEnchantmentLevel(BroomsEnchantments.AIR_SKILLS.get())) * 20 / 100.0F);
+            return 0.08F + (0.08F * (this.getItem().getEnchantmentLevel(BroomsEnchantments.AIR_SKILLS)) * 20 / 100.0F);
         }
     }
 
     public int getMaxHoverTime() {
-        return (int) (100 + (100 * (this.getItem().getEnchantmentLevel(BroomsEnchantments.HOVERING.get())) * 25 / 100.0F));
+        return (int) (100 + (100 * (this.getItem().getEnchantmentLevel(BroomsEnchantments.HOVERING)) * 25 / 100.0F));
     }
 }

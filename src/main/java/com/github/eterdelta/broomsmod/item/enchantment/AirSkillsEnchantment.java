@@ -2,10 +2,11 @@ package com.github.eterdelta.broomsmod.item.enchantment;
 
 import com.github.eterdelta.broomsmod.item.WoodenBroomItem;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.enchantment.Enchantment;
 
-public class AirSkillsEnchantment extends Enchantment {
-    public AirSkillsEnchantment() {
+public class AirSkillsEnchantment /* extends Enchantment */{
+   /* public AirSkillsEnchantment() {
         super(Rarity.COMMON, WoodenBroomItem.ENCHANTMENT_CATEGORY, EquipmentSlot.values());
     }
 
@@ -27,5 +28,5 @@ public class AirSkillsEnchantment extends Enchantment {
     @Override
     protected boolean checkCompatibility(Enchantment enchantment) {
         return !(enchantment instanceof LandSkillsEnchantment) && super.checkCompatibility(enchantment);
-    }
+    }*/
 }

@@ -6,7 +6,6 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.Input;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.world.entity.player.ProfilePublicKey;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,9 +20,10 @@ public class LocalPlayerMixin extends AbstractClientPlayer {
     @Shadow
     private boolean handsBusy;
 
-    public LocalPlayerMixin(ClientLevel clientLevel, GameProfile gameProfile, ProfilePublicKey profilePublicKey) {
-        super(clientLevel, gameProfile, profilePublicKey);
+    public LocalPlayerMixin(ClientLevel p_250460_, GameProfile p_249912_) {
+        super(p_250460_, p_249912_);
     }
+
 
     @Inject(at = @At("TAIL"), method = "rideTick()V")
     private void rideTick(CallbackInfo callbackInfo) {
