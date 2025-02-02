@@ -6,13 +6,10 @@ import com.github.eterdelta.broomsmod.entity.WoodenBroomEntity;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
 
 public class WoodenBroomRenderer extends BroomRenderer<WoodenBroomEntity> {
-    //private static final ResourceLocation BROOM_TEXTURE = new ResourceLocation(BroomsMod.MODID, "textures/entity/wooden_broom.png");
-    private static final ResourceLocation BROOM_TEXTURE = ResourceLocation.fromNamespaceAndPath(BroomsMod.MODID, "textures/entity/wooden_broom.png");
+    private static final ResourceLocation BROOM_TEXTURE = new ResourceLocation(BroomsMod.MODID, "textures/entity/wooden_broom.png");
     private final WoodenBroomModel<WoodenBroomEntity> broomModel;
-
 
     public WoodenBroomRenderer(EntityRendererProvider.Context context) {
         super(context);
@@ -25,7 +22,7 @@ public class WoodenBroomRenderer extends BroomRenderer<WoodenBroomEntity> {
     }
 
     @Override
-    public @NotNull ResourceLocation getTextureLocation(@NotNull WoodenBroomEntity woodenBroomEntity) {
+    public ResourceLocation getTextureLocation(WoodenBroomEntity woodenBroomEntity) {
         return BROOM_TEXTURE;
     }
 }

@@ -4,8 +4,7 @@ import com.github.eterdelta.broomsmod.item.WoodenBroomItem;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.enchantment.Enchantment;
 
-public class HoveringEnchantment /* extends Enchantment */ {
-    /*
+public class HoveringEnchantment extends Enchantment {
     public HoveringEnchantment() {
         super(Rarity.UNCOMMON, WoodenBroomItem.ENCHANTMENT_CATEGORY, EquipmentSlot.values());
     }
@@ -23,5 +22,5 @@ public class HoveringEnchantment /* extends Enchantment */ {
     @Override
     public int getMaxLevel() {
         return 4;
-    }*/
+    }
 }
