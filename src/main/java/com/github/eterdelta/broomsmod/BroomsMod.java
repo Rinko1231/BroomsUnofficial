@@ -4,12 +4,9 @@ import com.github.eterdelta.broomsmod.registry.BroomsEnchantments;
 import com.github.eterdelta.broomsmod.registry.BroomsEntities;
 import com.github.eterdelta.broomsmod.registry.BroomsItems;
 import com.github.eterdelta.broomsmod.registry.BroomsSounds;
-import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.level.ItemLike;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
-
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 @Mod(BroomsMod.MODID)
 public class BroomsMod {
@@ -18,21 +15,9 @@ public class BroomsMod {
     public BroomsMod() {
         final IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        BroomsEnchantments.register(eventBus);
+        BroomsEnchantments.ENCHANTMENTS.register(eventBus);
         BroomsEntities.ENTITIES.register(eventBus);
         BroomsItems.ITEMS.register(eventBus);
         BroomsSounds.SOUND_EVENTS.register(eventBus);
-        eventBus.addListener(this::addItemsToTabs);
     }
-
-
-    private void addItemsToTabs(BuildCreativeModeTabContentsEvent event)
-    {
-        if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES)
-        {
-            event.accept((ItemLike) BroomsItems.WOODEN_BROOM);
-        }
-    }
-
-
 }

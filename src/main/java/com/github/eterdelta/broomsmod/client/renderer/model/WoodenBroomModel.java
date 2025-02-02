@@ -12,12 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public class WoodenBroomModel<T extends WoodenBroomEntity> extends EntityModel<T> {
-    //public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation  ("modid", "wooden_broom"), "main");
-    public static final ModelLayerLocation LAYER_LOCATION =
-            new ModelLayerLocation(
-                    ResourceLocation.fromNamespaceAndPath("modid", "wooden_broom"),
-                    "main"
-            );
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "wooden_broom"), "main");
     private final ModelPart root;
 
     public WoodenBroomModel(ModelPart root) {
