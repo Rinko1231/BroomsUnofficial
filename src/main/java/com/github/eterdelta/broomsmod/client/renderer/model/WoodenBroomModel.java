@@ -1,5 +1,6 @@
 package com.github.eterdelta.broomsmod.client.renderer.model;
 
+import com.github.eterdelta.broomsmod.BroomsMod;
 import com.github.eterdelta.broomsmod.entity.WoodenBroomEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -15,7 +16,7 @@ public class WoodenBroomModel<T extends WoodenBroomEntity> extends EntityModel<T
     //public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation  ("modid", "wooden_broom"), "main");
     public static final ModelLayerLocation LAYER_LOCATION =
             new ModelLayerLocation(
-                    ResourceLocation.fromNamespaceAndPath("modid", "wooden_broom"),
+                    ResourceLocation.fromNamespaceAndPath(BroomsMod.MODID, "wooden_broom"),
                     "main"
             );
     private final ModelPart root;
