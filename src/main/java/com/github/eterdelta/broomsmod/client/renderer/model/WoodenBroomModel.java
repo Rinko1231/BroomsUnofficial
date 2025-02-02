@@ -1,6 +1,5 @@
 package com.github.eterdelta.broomsmod.client.renderer.model;
 
-import com.github.eterdelta.broomsmod.BroomsMod;
 import com.github.eterdelta.broomsmod.entity.WoodenBroomEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -13,12 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public class WoodenBroomModel<T extends WoodenBroomEntity> extends EntityModel<T> {
-    //public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation  ("modid", "wooden_broom"), "main");
-    public static final ModelLayerLocation LAYER_LOCATION =
-            new ModelLayerLocation(
-                    ResourceLocation.fromNamespaceAndPath(BroomsMod.MODID, "wooden_broom"),
-                    "main"
-            );
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "wooden_broom"), "main");
     private final ModelPart root;
 
     public WoodenBroomModel(ModelPart root) {
@@ -51,7 +45,7 @@ public class WoodenBroomModel<T extends WoodenBroomEntity> extends EntityModel<T
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int tint) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         root.render(poseStack, buffer, packedLight, packedOverlay);
     }
 }

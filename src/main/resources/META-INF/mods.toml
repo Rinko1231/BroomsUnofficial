@@ -3,12 +3,11 @@ loaderVersion = "[41,)"
 license = "MIT"
 [[mods]]
 modId = "broomsmod"
-version = "1.20.1-1.1.2"
-displayName = "Brooms Unofficial"
-authors = "EterDelta, xbxbxb123, Rinko1231"
+version = "${file.jarVersion}"
+displayName = "Brooms"
+authors = "EterDelta, xbxbxb123"
 description = '''
 Adds balanced enchantable brooms to Minecraft. Fly around the world!
-Ported to 1.20.1 by Rinko1231
 '''
 
 [[dependencies.broomsmod]]
@@ -21,6 +20,6 @@ side = "BOTH"
 [[dependencies.broomsmod]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.20,)"
+versionRange = "[1.19,1.20)"
 ordering = "NONE"
 side = "BOTH"
