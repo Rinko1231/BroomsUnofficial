@@ -4,8 +4,8 @@ import com.github.eterdelta.broomsmod.item.WoodenBroomItem;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.enchantment.Enchantment;
 
-public class SeabreezeEnchantment extends Enchantment {
-    public SeabreezeEnchantment() {
+public class SeabreezeEnchantment /* extends Enchantment */ {
+ /*   public SeabreezeEnchantment() {
         super(Rarity.RARE, WoodenBroomItem.ENCHANTMENT_CATEGORY, EquipmentSlot.values());
     }
 
@@ -22,5 +22,5 @@ public class SeabreezeEnchantment extends Enchantment {
     @Override
     public int getMaxLevel() {
         return 1;
-    }
+    }*/
 }
