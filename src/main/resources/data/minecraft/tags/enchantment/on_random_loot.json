@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "broomsmod:land_skills",
+	"broomsmod:air_skills",
+	"broomsmod:hovering",
+	"broomsmod:sea_breeze"
+  ]
+}
