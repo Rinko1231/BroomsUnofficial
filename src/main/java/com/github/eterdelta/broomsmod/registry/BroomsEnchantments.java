@@ -10,9 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.conditions.ICondition;
-import net.neoforged.neoforge.common.conditions.ModLoadedCondition;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,16 +30,8 @@ public class BroomsEnchantments {
         return ResourceKey.create(Registries.ENCHANTMENT, ResourceLocation.fromNamespaceAndPath(BroomsMod.MODID, pName));
     }
 
-    private static Holder<Enchantment> register(
-            BootstrapContext<Enchantment> pContext,
-            ResourceKey<Enchantment> pKey,
-            Enchantment.Builder pBuilder
-    ) {
-        // 将条件存储到 Map
-        conditions.put(pKey, List.of(new ModLoadedCondition(BroomsMod.MODID)));
-
-        // 注册附魔并返回其 Holder
-        return pContext.register(pKey, pBuilder.build(pKey.location()));
+    protected static void register(BootstrapContext<Enchantment> context, ResourceKey<Enchantment> key, Enchantment.Builder builder) {
+        context.register(key, builder.build(key.location()));
     }
 
     public static void bootstrap(BootstrapContext<Enchantment> pContext) {
@@ -100,7 +90,7 @@ public class BroomsEnchantments {
                         Enchantment.definition(
                                 itemHolderGetter.getOrThrow(BroomsTags.Items.WOODEN_BROOM),
                                 3,
-                                3,
+                                1,
                                 Enchantment.dynamicCost(30, 10),
                                 Enchantment.dynamicCost(80, 10),
                                 1,

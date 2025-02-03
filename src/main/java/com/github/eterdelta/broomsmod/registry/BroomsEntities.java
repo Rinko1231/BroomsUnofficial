@@ -19,8 +19,11 @@ public class BroomsEntities {
 
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, BroomsMod.MODID);
 
-    public static final Supplier<EntityType<WoodenBroomEntity>> WOODEN_BROOM = ENTITIES.register("wooden_broom", () -> EntityType.Builder.of(WoodenBroomEntity::new, MobCategory.MISC)
-            .sized(0.7F, 0.6F).eyeHeight(0.9F * 0.6F).build(prefix("wooden_broom")));
+    public static final Supplier<EntityType<WoodenBroomEntity>> WOODEN_BROOM = ENTITIES.register("wooden_broom",
+            () -> EntityType.Builder.<WoodenBroomEntity>of(WoodenBroomEntity::new, MobCategory.MISC) // 显式指定泛型类型
+                    .sized(0.7F, 0.6F)
+                    .eyeHeight(0.9F * 0.6F)
+                    .build(String.valueOf(ResourceLocation.fromNamespaceAndPath(BroomsMod.MODID, "wooden_broom"))));
 
     private static ResourceKey<EntityType<?>> prefix(String path) {
         return ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(BroomsMod.MODID, path));

@@ -6,12 +6,16 @@ import com.github.eterdelta.broomsmod.registry.BroomsItems;
 import com.github.eterdelta.broomsmod.registry.BroomsSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerEntity;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -52,16 +56,17 @@ public class WoodenBroomEntity extends Entity {
     private double lerpYRot;
     private double lerpXRot;
 
-    public WoodenBroomEntity(EntityType<? extends WoodenBroomEntity> entityType, Level level) {
-        super(entityType, level);
-        this.blocksBuilding = true;
-        this.canHover = true;
-        this.hoverTime = this.getMaxHoverTime();
-    }
+   public WoodenBroomEntity(EntityType<WoodenBroomEntity> entityType, Level level) {
+       super(entityType, level);
+       this.blocksBuilding = true;
+       this.canHover = true;
+       this.hoverTime = this.getMaxHoverTime();
+   }
 
+    // 辅助构造函数：用于通过物品生成实体
     public WoodenBroomEntity(ItemStack itemStack, Level level, double x, double y, double z) {
         this(BroomsEntities.WOODEN_BROOM.get(), level);
-        this.setItem(itemStack.copy());
+        this.entityData.set(ITEM, itemStack.copy()); // 触发数据同步
         this.setPos(x, y, z);
         this.xo = x;
         this.yo = y;
@@ -69,7 +74,6 @@ public class WoodenBroomEntity extends Entity {
     }
 
 
-    @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         builder.define(ITEM, ItemStack.EMPTY);
         builder.define(HURT_TIME, 0);
@@ -77,16 +81,13 @@ public class WoodenBroomEntity extends Entity {
         builder.define(DAMAGE, 0.0F);
     }
 
-    private static final EntityDataAccessor<String> WOODEN_BROOM = SynchedEntityData.defineId(WoodenBroomEntity.class, EntityDataSerializers.STRING);
-
-
 
     @Override
     public boolean isPushable() {
         return true;
     }
 
-    @Override
+
     public double getPassengersRidingOffset() {
         return 0.1D;
     }
@@ -137,7 +138,6 @@ public class WoodenBroomEntity extends Entity {
         return !this.isRemoved();
     }
 
-    @Override
     public void lerpTo(double p_38299_, double p_38300_, double p_38301_, float p_38302_, float p_38303_, int p_38304_, boolean p_38305_) {
         this.lerpX = p_38299_;
         this.lerpY = p_38300_;
@@ -274,7 +274,7 @@ public class WoodenBroomEntity extends Entity {
     @Override
     public void positionRider(@NotNull Entity rider, @NotNull MoveFunction p_19958_) {
         if (this.hasPassenger(rider)) {
-            double d0 = this.getY() + this.getPassengersRidingOffset() + rider.getMyRidingOffset();
+            double d0 = this.getY() + this.getPassengersRidingOffset() + this.getPassengersRidingOffset();
             p_19958_.accept(rider, this.getX(), d0, this.getZ());
         }
         if (rider instanceof Player player) {
@@ -282,15 +282,37 @@ public class WoodenBroomEntity extends Entity {
         }
     }
 
+
     @Override
-    protected void addAdditionalSaveData(CompoundTag compoundTag) {
-        compoundTag.put("Item", this.getItem().save(new CompoundTag()));
+    protected void addAdditionalSaveData(@NotNull CompoundTag compoundTag) {
+        //compoundTag.put("Item", this.getItem().save(new CompoundTag()));
+        // 确保实体已附加到Level
+        if (this.level() == null) return;
+        // 获取注册表访问器
+        HolderLookup.Provider provider = this.level().registryAccess();
+        // 创建新Tag并保存ItemStack
+        CompoundTag itemTag = new CompoundTag();
+        this.getItem().save(provider, itemTag);
+        // 存入实体NBT
+        compoundTag.put("Item", itemTag);
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag compoundTag) {
-        CompoundTag itemTag = compoundTag.getCompound("Item");
-        this.setItem(ItemStack.of(itemTag));
+    protected void readAdditionalSaveData(@NotNull CompoundTag compoundTag) {
+        //CompoundTag itemTag = compoundTag.getCompound("Item");
+        //this.setItem(ItemStack.of(itemTag));
+        // 确保实体已附加到 Level
+        if (this.level() == null) return;
+        // 检查是否存在有效的 "Item" Tag
+        if (compoundTag.contains("Item", Tag.TAG_COMPOUND)) {
+            // 获取注册表访问器
+            HolderLookup.Provider provider = this.level().registryAccess();
+            // 解析 ItemStack
+            CompoundTag itemTag = compoundTag.getCompound("Item");
+            ItemStack stack = ItemStack.parseOptional(provider, itemTag);
+            // 设置物品（自动处理空堆栈）
+            this.setItem(stack);
+        }
     }
 
     @Override
@@ -324,10 +346,16 @@ public class WoodenBroomEntity extends Entity {
         this.inputJump = jumping;
     }
 
-    @Override
+    /*@Override
     public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
+    }*/
+    @Override
+    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket(@NotNull ServerEntity serverEntity) {
+        // 使用原版 ClientboundAddEntityPacket
+        return new ClientboundAddEntityPacket(this, serverEntity, 0);
     }
+
 
     @Override
     protected void addPassenger(@NotNull Entity passenger) {
@@ -401,13 +429,13 @@ public class WoodenBroomEntity extends Entity {
 
     public float getSpeed() {
         if (this.onGround()) {
-            return 0.08F + (0.08F * (this.getItem().getEnchantmentLevel(BroomsEnchantments.LAND_SKILLS)) * 20 / 100.0F);
+            return 0.08F + (0.08F * (EnchantmentHelper.getTagEnchantmentLevel(BroomsEnchantments.LAND_SKILLS, this.getItem()) * 20 / 100.0F));
         } else {
-            return 0.08F + (0.08F * (this.getItem().getEnchantmentLevel(BroomsEnchantments.AIR_SKILLS)) * 20 / 100.0F);
+            return 0.08F + (0.08F * (EnchantmentHelper.getTagEnchantmentLevel(BroomsEnchantments.AIR_SKILLS, this.getItem()) * 20 / 100.0F));
         }
     }
 
     public int getMaxHoverTime() {
-        return (int) (100 + (100 * (this.getItem().getEnchantmentLevel(BroomsEnchantments.HOVERING)) * 25 / 100.0F));
+        return (int) (100 + (100 * (EnchantmentHelper.getTagEnchantmentLevel(BroomsEnchantments.HOVERING, this.getItem())) * 25 / 100.0F));
     }
 }
