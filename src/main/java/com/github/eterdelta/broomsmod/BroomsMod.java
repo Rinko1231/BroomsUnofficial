@@ -3,35 +3,25 @@ package com.github.eterdelta.broomsmod;
 import com.github.eterdelta.broomsmod.registry.BroomsEntities;
 import com.github.eterdelta.broomsmod.registry.BroomsItems;
 import com.github.eterdelta.broomsmod.registry.BroomsSounds;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.level.ItemLike;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Mod(BroomsMod.MODID)
-public class BroomsMod {
+public class BroomsMod implements ModInitializer {
     public static final String MODID = "broomsmod";
+    public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
 
-    public BroomsMod(IEventBus eventBus) {
-        BroomsEntities.ENTITIES.register(eventBus);
-        BroomsItems.ITEMS.register(eventBus);
-        BroomsSounds.SOUND_EVENTS.register(eventBus);
-        eventBus.addListener(this::addItemsToTabs);
-        //NeoForge.EVENT_BUS.register(new TestingChatEvent());
+    @Override
+    public void onInitialize() {
+        BroomsEntities.init();
+        BroomsItems.init();
+        BroomsSounds.init();
+
+        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(entries -> {
+            entries.accept(BroomsItems.WOODEN_BROOM);
+        });
     }
-
-
-    private void addItemsToTabs(BuildCreativeModeTabContentsEvent event)
-    {
-        if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES)
-        {
-            event.accept((ItemLike) BroomsItems.WOODEN_BROOM);
-        }
-    }
-
-
-
 }

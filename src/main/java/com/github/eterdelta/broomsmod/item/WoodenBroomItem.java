@@ -38,12 +38,12 @@ public class WoodenBroomItem extends Item {
                 Holder<Enchantment> holderHovering = getHolder(level, BroomsEnchantments.HOVERING);
                 Holder<Enchantment> holderSeaBreeze = getHolder(level, BroomsEnchantments.SEA_BREEZE);
 
-                int hoveringLevel =player.getItemInHand(InteractionHand.MAIN_HAND).getEnchantmentLevel(holderHovering);
+                int hoveringLevel = player.getItemInHand(InteractionHand.MAIN_HAND).broomsUnofficial$getEnchantmentLevel(holderHovering);
 
-                int airSkillLevel = EnchantmentHelper.getTagEnchantmentLevel(holderAirSkills, itemStack);
-                int landSkillLevel = EnchantmentHelper.getTagEnchantmentLevel(holderLandSkill, itemStack);
+                int airSkillLevel = EnchantmentHelper.getItemEnchantmentLevel(holderAirSkills, itemStack);
+                int landSkillLevel = EnchantmentHelper.getItemEnchantmentLevel(holderLandSkill, itemStack);
                 //int hoveringLevel = EnchantmentHelper.getTagEnchantmentLevel(holderHovering, itemStack);
-                int seaBreezeLevel = EnchantmentHelper.getTagEnchantmentLevel(holderSeaBreeze, itemStack);
+                int seaBreezeLevel = EnchantmentHelper.getItemEnchantmentLevel(holderSeaBreeze, itemStack);
 
                 WoodenBroomEntity broom = new WoodenBroomEntity(itemStack, level, hitResult.getLocation().x(), hitResult.getLocation().y(), hitResult.getLocation().z(), airSkillLevel, landSkillLevel, hoveringLevel, seaBreezeLevel);
                 broom.setYRot(player.getYRot());
