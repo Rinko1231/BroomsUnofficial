@@ -1,0 +1,41 @@
+{
+	"schemaVersion": 1,
+	"id": "broomsmod",
+	"version": "${version}",
+	"name": "Brooms Unofficial",
+	"description": "Adds balanced enchantable brooms to Minecraft. Fly around the world!",
+	"authors": [
+		"Rinko1231", "xiaoliziawa", "Xbxbxb123", "EterDelta", "TexTrue"
+	],
+	"contact": {
+		"sources": "https://github.com/Rinko1231/BroomsUnofficial"
+	},
+	"license": "MIT",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.github.eterdelta.broomsmod.BroomsMod"
+		],
+		"client": [
+			"com.github.eterdelta.broomsmod.BroomsModClient"
+		],
+		"fabric-datagen": [
+			"com.github.eterdelta.broomsmod.datagen.DataGenerators"
+		]
+	},
+	"mixins": [
+		"broomsmod.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16.10",
+		"minecraft": "~1.21.1",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"custom": {
+		"loom:injected_interfaces": {
+			"net/minecraft/class_1799": ["com/github/eterdelta/broomsmod/extension/ItemStackExtension"],
+			"net/minecraft/class_1792": ["com/github/eterdelta/broomsmod/extension/ItemExtension"]
+		}
+	}
+}

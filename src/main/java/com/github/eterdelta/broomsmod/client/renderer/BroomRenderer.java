@@ -18,8 +18,6 @@ import org.joml.Vector3f;
 
 import static org.joml.Math.cos;
 import static org.joml.Math.sin;
-import com.github.eterdelta.broomsmod.client.renderer.WoodenBroomRenderer.*;
-
 
 public abstract class BroomRenderer<T extends WoodenBroomEntity> extends EntityRenderer<T> {
     public BroomRenderer(EntityRendererProvider.Context context) {

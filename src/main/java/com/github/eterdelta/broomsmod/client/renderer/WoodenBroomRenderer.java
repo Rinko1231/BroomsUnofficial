@@ -9,10 +9,8 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 public class WoodenBroomRenderer extends BroomRenderer<WoodenBroomEntity> {
-    //private static final ResourceLocation BROOM_TEXTURE = new ResourceLocation(BroomsMod.MODID, "textures/entity/wooden_broom.png");
     private static final ResourceLocation BROOM_TEXTURE = ResourceLocation.fromNamespaceAndPath(BroomsMod.MODID, "textures/entity/wooden_broom.png");
     private final WoodenBroomModel<WoodenBroomEntity> broomModel;
-
 
     public WoodenBroomRenderer(EntityRendererProvider.Context context) {
         super(context);

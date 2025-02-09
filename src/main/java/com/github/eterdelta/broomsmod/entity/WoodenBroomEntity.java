@@ -76,7 +76,7 @@ public class WoodenBroomEntity extends Entity {
 
     // 辅助构造函数
     public WoodenBroomEntity(ItemStack itemStack, Level level, double x, double y, double z, int as, int ls, int hv, int sb) {
-        this(BroomsEntities.WOODEN_BROOM.get(), level);
+        this(BroomsEntities.WOODEN_BROOM, level);
         this.entityData.set(ITEM, itemStack.copy());
         this.entityData.set(A_S, as);
         this.entityData.set(L_S, ls);
@@ -188,7 +188,7 @@ public class WoodenBroomEntity extends Entity {
                 this.hoverTime--;
 
                 if (this.hoverTime == 5) {
-                    this.playSound(BroomsSounds.BROOM_FALL.value(), 1.0F, 1.0F);
+                    this.playSound(BroomsSounds.BROOM_FALL, 1.0F, 1.0F);
                 }
             } else {
                 this.canHover = false;
@@ -249,7 +249,7 @@ public class WoodenBroomEntity extends Entity {
         }
 
         if (this.isInWaterOrBubble()) {
-            this.playSound(BroomsSounds.BROOM_DESTROY.value(), 0.8F, 1.0F);
+            this.playSound(BroomsSounds.BROOM_DESTROY, 0.8F, 1.0F);
             this.spawnBroomItem();
             this.discard();
         }
@@ -383,7 +383,7 @@ public class WoodenBroomEntity extends Entity {
 
     @Override
     public ItemStack getPickResult() {
-        return new ItemStack(BroomsItems.WOODEN_BROOM.get());
+        return new ItemStack(BroomsItems.WOODEN_BROOM);
     }
 
     public Vec3 getInputVector(Vec3 movement, float speed, float angle) {
@@ -402,7 +402,7 @@ public class WoodenBroomEntity extends Entity {
         if (!this.getItem().isEmpty()) {
             this.spawnAtLocation(this.getItem());
         } else {
-            this.spawnAtLocation(new ItemStack(BroomsItems.WOODEN_BROOM.get()));
+            this.spawnAtLocation(new ItemStack(BroomsItems.WOODEN_BROOM));
         }
     }
 
