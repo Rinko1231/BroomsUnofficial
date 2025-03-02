@@ -9,7 +9,11 @@
     "ItemStackMixin"
   ],
   "client": [
-    "LocalPlayerMixin"
+    "ItemRendererAccessor",
+    "ItemRendererMixin",
+    "LocalPlayerMixin",
+    "ModelLoaderMixin",
+    "PlayerSkinMixin"
   ],
   "injectors": {
     "defaultRequire": 1

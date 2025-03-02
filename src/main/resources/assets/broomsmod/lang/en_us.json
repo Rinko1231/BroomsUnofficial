@@ -1,6 +1,7 @@
 {
   "entity.broomsmod.wooden_broom": "Wooden Broom",
   "item.broomsmod.wooden_broom": "Wooden Broom",
+  "item.broomsmod.succuba_hat_item": "Succuba Hat",
 
   
   "enchantment.broomsmod.air_skills": "Air Skills",
@@ -17,5 +18,8 @@
   
 
   "advancements.husbandry.ride_broom.title": "Time to get rid of the Boats",
-  "advancements.husbandry.ride_broom.description": "Ride a Wooden Broom, a Magical Vehicle."
+  "advancements.husbandry.ride_broom.description": "Ride a Wooden Broom, a Magical Vehicle.",
+
+  "advancements.husbandry.wadashi_desu.title": "That's me!",
+  "advancements.husbandry.wadashi_desu.description": "Wear the succuba hat."
 }

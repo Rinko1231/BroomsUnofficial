@@ -20,10 +20,10 @@ public class BroomsEntities {
     );
 
     private static ResourceKey<EntityType<?>> prefix(String path) {
-        return ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(BroomsMod.MODID, path));
+        return ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(com.github.eterdelta.broomsmod.BroomsMod.MODID, path));
     }
 
     public static void init() {
-        BroomsMod.LOGGER.info("BroomsMod Entities registered");
+        com.github.eterdelta.broomsmod.BroomsMod.LOGGER.info("BroomsMod Entities registered");
     }
 }

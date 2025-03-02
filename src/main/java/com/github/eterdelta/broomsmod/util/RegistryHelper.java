@@ -19,19 +19,18 @@ public class RegistryHelper {
         ResourceLocation itemId = ResourceLocation.fromNamespaceAndPath(BroomsMod.MODID, id);
 
         // Register the item.
-        Item registeredItem = Registry.register(BuiltInRegistries.ITEM, itemId, item);
 
         // Return the registered item!
-        return registeredItem;
+        return Registry.register(BuiltInRegistries.ITEM, itemId, item);
     }
 
     public static SoundEvent registerSound(String id, SoundEvent soundEvent) {
-        ResourceLocation soundId = ResourceLocation.fromNamespaceAndPath(BroomsMod.MODID, id);
+        ResourceLocation soundId = ResourceLocation.fromNamespaceAndPath(com.github.eterdelta.broomsmod.BroomsMod.MODID, id);
         return Registry.register(BuiltInRegistries.SOUND_EVENT, soundId, soundEvent);
     }
 
     public static <T extends Entity> EntityType<T> registerEntity(String id, EntityType<T> entityType) {
-        ResourceLocation entityId = ResourceLocation.fromNamespaceAndPath(BroomsMod.MODID, id);
+        ResourceLocation entityId = ResourceLocation.fromNamespaceAndPath(com.github.eterdelta.broomsmod.BroomsMod.MODID, id);
         return Registry.register(BuiltInRegistries.ENTITY_TYPE, entityId, entityType);
     }
 

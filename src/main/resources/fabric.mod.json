@@ -5,7 +5,7 @@
 	"name": "Brooms Unofficial",
 	"description": "Adds balanced enchantable brooms to Minecraft. Fly around the world!",
 	"authors": [
-		"Rinko1231", "xiaoliziawa", "Xbxbxb123", "EterDelta", "TexTrue"
+		"Rinko1231", "xiaoliziawa", "Xbxbxb123", "EterDelta", "TexTrue", "NightEpiphany"
 	],
 	"contact": {
 		"sources": "https://github.com/Rinko1231/BroomsUnofficial"
@@ -14,7 +14,7 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.github.eterdelta.broomsmod.BroomsMod"
+          "com.github.eterdelta.broomsmod.BroomsMod"
 		],
 		"client": [
 			"com.github.eterdelta.broomsmod.BroomsModClient"

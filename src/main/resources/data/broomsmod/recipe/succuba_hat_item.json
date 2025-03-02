@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " S ",
+    "HBH",
+    "HHH"
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:phantom_membrane"
+    },
+    "H": {
+      "item": "minecraft:black_wool"
+    },
+    "B": {
+      "item": "minecraft:experience_bottle"
+    }
+  },
+  "result": {
+    "id": "broomsmod:succuba_hat_item"
+  }
+}
