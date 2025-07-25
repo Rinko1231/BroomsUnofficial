@@ -15,6 +15,7 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.HitResult;
+import org.jetbrains.annotations.NotNull;
 
 import static com.github.eterdelta.broomsmod.registry.BroomsEnchantments.getHolder;
 
@@ -24,7 +25,7 @@ public class WoodenBroomItem extends Item {
         super(properties);
     }
 
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {
+    public @NotNull InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand interactionHand) {
         ItemStack itemStack = player.getItemInHand(interactionHand);
         HitResult hitResult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.ANY);
         if (hitResult.getType() == HitResult.Type.MISS) {
@@ -32,17 +33,14 @@ public class WoodenBroomItem extends Item {
         } else {
             if (hitResult.getType() == HitResult.Type.BLOCK) {
 
-
                 Holder<Enchantment> holderAirSkills = getHolder(level, BroomsEnchantments.AIR_SKILLS);
                 Holder<Enchantment> holderLandSkill = getHolder(level, BroomsEnchantments.LAND_SKILLS);
                 Holder<Enchantment> holderHovering = getHolder(level, BroomsEnchantments.HOVERING);
                 Holder<Enchantment> holderSeaBreeze = getHolder(level, BroomsEnchantments.SEA_BREEZE);
 
                 int hoveringLevel = player.getItemInHand(InteractionHand.MAIN_HAND).broomsUnofficial$getEnchantmentLevel(holderHovering);
-
                 int airSkillLevel = EnchantmentHelper.getItemEnchantmentLevel(holderAirSkills, itemStack);
                 int landSkillLevel = EnchantmentHelper.getItemEnchantmentLevel(holderLandSkill, itemStack);
-                //int hoveringLevel = EnchantmentHelper.getTagEnchantmentLevel(holderHovering, itemStack);
                 int seaBreezeLevel = EnchantmentHelper.getItemEnchantmentLevel(holderSeaBreeze, itemStack);
 
                 WoodenBroomEntity broom = new WoodenBroomEntity(itemStack, level, hitResult.getLocation().x(), hitResult.getLocation().y(), hitResult.getLocation().z(), airSkillLevel, landSkillLevel, hoveringLevel, seaBreezeLevel);

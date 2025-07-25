@@ -3,6 +3,7 @@ package com.github.eterdelta.broomsmod.entity;
 import com.github.eterdelta.broomsmod.registry.BroomsEntities;
 import com.github.eterdelta.broomsmod.registry.BroomsItems;
 import com.github.eterdelta.broomsmod.registry.BroomsSounds;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -110,7 +111,7 @@ public class WoodenBroomEntity extends Entity {
 
 
     public double getPassengersRidingOffset() {
-        return 0.1D;
+        return 0.05D;
     }
 
     @Override
@@ -279,6 +280,7 @@ public class WoodenBroomEntity extends Entity {
     private void handleInputs() {
         if (this.isVehicle()) {
             LivingEntity controller = this.getControllingPassenger();
+            assert controller != null;
             Vec3 inputVector = this.getInputVector(new Vec3(controller.xxa * 0.8F, 0.0D, controller.zza), this.getSpeed(), this.getYRot());
 
             if (this.inputLeft || this.inputRight || this.inputUp || this.inputDown) {
@@ -295,7 +297,7 @@ public class WoodenBroomEntity extends Entity {
     @Override
     public void positionRider(@NotNull Entity rider, @NotNull MoveFunction p_19958_) {
         if (this.hasPassenger(rider)) {
-            double d0 = this.getY() + this.getPassengersRidingOffset() + this.getPassengersRidingOffset();
+            double d0 = this.getY() + this.getPassengersRidingOffset() - 0.25D;
             p_19958_.accept(rider, this.getX(), d0, this.getZ());
         }
         if (rider instanceof Player player) {
@@ -307,11 +309,12 @@ public class WoodenBroomEntity extends Entity {
     @Override
     protected void addAdditionalSaveData(@NotNull CompoundTag compoundTag) {
         //compoundTag.put("Item", this.getItem().save(new CompoundTag()));
-        if (this.level() == null) return;
+        this.level();
         HolderLookup.Provider provider = this.level().registryAccess();
         // 创建新Tag
         CompoundTag itemTag = new CompoundTag();
-        this.getItem().save(provider, itemTag);
+        if (!this.getItem().isEmpty())
+            this.getItem().save(provider, itemTag);
         // 存入实体NBT
         compoundTag.put("Item", itemTag);
     }
@@ -320,7 +323,7 @@ public class WoodenBroomEntity extends Entity {
     protected void readAdditionalSaveData(@NotNull CompoundTag compoundTag) {
         //CompoundTag itemTag = compoundTag.getCompound("Item");
         //this.setItem(ItemStack.of(itemTag));
-        if (this.level() == null) return;
+        this.level();
         // 检查是否存在有效的Item Tag
         if (compoundTag.contains("Item", Tag.TAG_COMPOUND)) {
             HolderLookup.Provider provider = this.level().registryAccess();
@@ -387,11 +390,13 @@ public class WoodenBroomEntity extends Entity {
     }
 
     public Vec3 getInputVector(Vec3 movement, float speed, float angle) {
+        Player player = Minecraft.getInstance().player;
         double length = movement.lengthSqr();
         if (length < 1.0E-7D) {
             return Vec3.ZERO;
         } else {
-            Vec3 vec3 = (length > 1.0D ? movement.normalize() : movement).scale(speed);
+            assert player != null;
+            Vec3 vec3 = (length > 1.0D ? movement.normalize() : movement).scale(player.getItemBySlot(EquipmentSlot.HEAD).is(BroomsItems.SUCCUBA_HAT) ? speed * 2.25f : speed);
             float f = Mth.sin(angle * ((float) Math.PI / 180F));
             float f1 = Mth.cos(angle * ((float) Math.PI / 180F));
             return new Vec3(vec3.x * (double) f1 - vec3.z * (double) f, vec3.y, vec3.z * (double) f1 + vec3.x * (double) f);

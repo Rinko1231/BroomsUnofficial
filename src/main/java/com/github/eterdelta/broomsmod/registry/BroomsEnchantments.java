@@ -6,7 +6,6 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricDynamicRegistryProvider
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlotGroup;
@@ -16,18 +15,18 @@ import net.minecraft.world.level.Level;
 
 public class BroomsEnchantments {
 
-    public static Holder<Enchantment> getHolder(Level level, ResourceKey<Enchantment> enchantment) {
-        return level.holderLookup(enchantment.registryKey()).getOrThrow(enchantment);
-    }
-
     public static ResourceKey<Enchantment> createResourceKey(String path) {
         return ResourceKey.create(Registries.ENCHANTMENT, ResourceLocation.fromNamespaceAndPath(BroomsMod.MODID, path));
     }
 
-    public static ResourceKey<Enchantment> HOVERING = createResourceKey("hovering");
-    public static ResourceKey<Enchantment> AIR_SKILLS = createResourceKey("air_skills");
-    public static ResourceKey<Enchantment> LAND_SKILLS = createResourceKey("land_skills");
-    public static ResourceKey<Enchantment> SEA_BREEZE = createResourceKey("sea_breeze");
+    public static final ResourceKey<Enchantment> HOVERING = createResourceKey("hovering");
+    public static final ResourceKey<Enchantment> AIR_SKILLS = createResourceKey("air_skills");
+    public static final ResourceKey<Enchantment> LAND_SKILLS = createResourceKey("land_skills");
+    public static final ResourceKey<Enchantment> SEA_BREEZE = createResourceKey("sea_breeze");
+
+    public static Holder<Enchantment> getHolder(Level level, ResourceKey<Enchantment> enchantment) {
+        return level.holderLookup(enchantment.registryKey()).getOrThrow(enchantment);
+    }
 
     public static void bootstrap(FabricDynamicRegistryProvider.Entries entries) {
 
@@ -107,6 +106,6 @@ public class BroomsEnchantments {
     }
 
     private static ResourceKey<Enchantment> key(String pName) {
-        return ResourceKey.create(Registries.ENCHANTMENT, ResourceLocation.fromNamespaceAndPath(BroomsMod.MODID, pName));
+        return ResourceKey.create(Registries.ENCHANTMENT, ResourceLocation.fromNamespaceAndPath(com.github.eterdelta.broomsmod.BroomsMod.MODID, pName));
     }
 }

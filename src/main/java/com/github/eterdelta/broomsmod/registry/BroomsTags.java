@@ -19,7 +19,7 @@ public class BroomsTags {
             return TagKey.create(Registries.ENCHANTMENT, cr1ate(name));
         }
         public static ResourceLocation cr1ate(String path) {
-            return ResourceLocation.fromNamespaceAndPath(BroomsMod.MODID, path);
+            return ResourceLocation.fromNamespaceAndPath(com.github.eterdelta.broomsmod.BroomsMod.MODID, path);
         }
     }
 }

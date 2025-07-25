@@ -16,6 +16,6 @@ public class BroomsSounds {
     }
 
     public static void init() {
-        BroomsMod.LOGGER.info("BroomsMod SoundEvent registered");
+        com.github.eterdelta.broomsmod.BroomsMod.LOGGER.info("BroomsMod SoundEvent registered");
     }
 }
